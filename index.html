@@ -8,15 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fdf6f0;
+            --bg-color: #fdf4f0;
             --card-bg: #ffffff;
             --primary-purple: #4a154b;
             --sunset-red: #d93856;
             --sunset-orange: #f26419;
-            --accent-pink: #f8ad9d;
             --text-dark: #2b2d42;
             --text-muted: #6c757d;
-            --shadow: 0 10px 20px rgba(217, 56, 86, 0.1);
+            --shadow: 0 10px 22px rgba(184, 50, 80, 0.12);
             --border-radius: 18px;
         }
 
@@ -28,7 +27,7 @@
 
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background: linear-gradient(180deg, #fdf6f0 0%, #fff0f3 100%);
+            background: linear-gradient(180deg, #fdf4f0 0%, #fff0f3 50%, #fceae6 100%);
             color: var(--text-dark);
             line-height: 1.6;
             padding-bottom: 60px;
@@ -37,22 +36,22 @@
 
         /* 夕陽紫橘紅漸層 Header */
         header {
-            background: linear-gradient(135deg, #2b1055 0%, #6b1d5c 35%, #b83250 65%, #e75a3c 85%, #f2994a 100%);
+            background: linear-gradient(135deg, #2b1055 0%, #75225b 30%, #b83250 60%, #e75a3c 85%, #f2994a 100%);
             color: white;
-            padding: 50px 20px 45px 20px;
+            padding: 55px 20px 48px 20px;
             text-align: center;
             border-bottom-left-radius: 36px;
             border-bottom-right-radius: 36px;
-            box-shadow: 0 8px 25px rgba(107, 29, 92, 0.25);
+            box-shadow: 0 10px 30px rgba(117, 34, 91, 0.3);
             margin-bottom: 35px;
         }
 
         header h1 {
-            font-size: 2.2rem;
+            font-size: 2.3rem;
             font-weight: 700;
             letter-spacing: 1.5px;
             margin-bottom: 12px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 6px rgba(0,0,0,0.25);
         }
 
         header p {
@@ -60,11 +59,12 @@
             opacity: 0.95;
             font-weight: 500;
             letter-spacing: 0.5px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.18);
             display: inline-block;
-            padding: 6px 18px;
+            padding: 8px 22px;
             border-radius: 30px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         .container {
@@ -74,9 +74,9 @@
         }
 
         .section-title {
-            font-size: 1.3rem;
-            color: #5c1d4e;
-            margin: 32px 0 16px 0;
+            font-size: 1.35rem;
+            color: #6b1d5c;
+            margin: 35px 0 16px 0;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -95,7 +95,7 @@
             border-radius: var(--border-radius);
             padding: 24px;
             box-shadow: var(--shadow);
-            border: 1px solid #ffe3e3;
+            border: 1px solid #ffe2e2;
             transition: all 0.28s ease;
             display: flex;
             flex-direction: column;
@@ -106,7 +106,7 @@
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 14px 28px rgba(217, 56, 86, 0.18);
+            box-shadow: 0 14px 28px rgba(184, 50, 80, 0.22);
             border-color: var(--sunset-red);
         }
 
@@ -147,26 +147,26 @@
 
         /* IG 特殊款式卡片 */
         .card-ig {
-            background: linear-gradient(135deg, #ffffff 0%, #fff5f8 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #fff0f6 100%);
             border: 1.5px solid #fbcfe8;
         }
 
         .card-ig:hover {
-            border-color: #d946ef;
+            border-color: #e1306c;
         }
 
         .card-ig .card-btn {
-            background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+            background: linear-gradient(135deg, #f472b6 0%, #e1306c 100%);
             color: white;
         }
 
-        /* 即時公告區塊特化 */
+        /* 公告區塊 */
         .announcement-box {
             background: white;
             border-radius: var(--border-radius);
             padding: 24px;
             box-shadow: var(--shadow);
-            border: 1px solid #ffe3e3;
+            border: 1px solid #ffe2e2;
         }
 
         .ann-header {
@@ -213,7 +213,7 @@
         }
 
         .date { font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; }
-        .author { font-size: 0.85rem; color: #5c1d4e; font-weight: 700; white-space: nowrap; }
+        .author { font-size: 0.85rem; color: #6b1d5c; font-weight: 700; white-space: nowrap; }
         .content { font-size: 0.95rem; color: var(--text-dark); flex-grow: 1; }
 
         .loading { color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 15px 0; }
@@ -228,7 +228,7 @@
 </head>
 <body>
 
-    <!-- 夕陽主題 Header -->
+    <!-- 標題與夕陽漸層 Header -->
     <header>
         <h1>臺北市中正高中122音樂班</h1>
         <p>【沒有音樂，生命是一個錯誤--德國哲學家尼采】</p>
@@ -246,9 +246,9 @@
                 </a>
             </div>
 
-            <!-- 自動同步 CSV 公告欄位 -->
+            <!-- CSV 自動連動顯示區域 -->
             <ul id="announcement-list" class="ann-list">
-                <li class="loading">⏳ 正在載入最新公告...</li>
+                <li class="loading">⏳ 正在同步載入 Google 試算表最新公告...</li>
             </ul>
         </div>
 
@@ -256,7 +256,7 @@
         <h2 class="section-title">🖼️ 班級相簿與檔案資源</h2>
         <div class="grid">
 
-            <!-- 照片集 -->
+            <!-- 班級活動照片集 -->
             <a href="https://drive.google.com/drive/u/0/folders/1GUukDYNqs3RGSUh8-H8VaeYRW-Fcur5a" target="_blank" class="card">
                 <div>
                     <div class="card-icon">📸</div>
@@ -282,7 +282,7 @@
         <h2 class="section-title">🎲 班級線上工具</h2>
         <div class="grid">
             
-            <!-- 打掃抽籤 -->
+            <!-- 打掃工作抽籤系統 -->
             <a href="cleaning.html" class="card">
                 <div>
                     <div class="card-icon">🧹</div>
@@ -292,7 +292,7 @@
                 <span class="card-btn">前往抽籤 →</span>
             </a>
 
-            <!-- 座位抽籤 -->
+            <!-- 122班 座位抽籤系統 -->
             <a href="seating.html" class="card">
                 <div>
                     <div class="card-icon">🎹</div>
@@ -304,7 +304,7 @@
 
         </div>
 
-        <!-- 4. 📸 班級 IG -->
+        <!-- 4. 📱 班級社群平台 (IG) -->
         <h2 class="section-title">📱 班級社群平台</h2>
         <div class="grid">
             
@@ -318,69 +318,3 @@
             </a>
 
         </div>
-
-        <footer>
-            <p>© 臺北市中正高中 122音樂班 | Powered by GitHub Pages</p>
-        </footer>
-
-    </div>
-
-    <!-- 試算表 CSV 自動同步 JavaScript -->
-    <script>
-        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSZPrL68-j6NE34fBc7ZSYpGH6YeIM_FPjX2USYOG4F-kzsWea8IQRB2xuGb1uH5fgRoBt95OmIBbbI/pub?gid=0&single=true&output=csv';
-
-        async function fetchAnnouncements() {
-            const listContainer = document.getElementById('announcement-list');
-            
-            try {
-                const response = await fetch(GOOGLE_SHEET_CSV_URL);
-                const data = await response.text();
-
-                // 解析 CSV 格式 (處理換行與雙引號)
-                const rows = data.split('\n').map(row => row.split(','));
-                
-                // 過濾空行與標題列
-                const announcements = rows.slice(1).filter(r => r.length >= 4 && r[0].trim() !== '');
-
-                if (announcements.length === 0) {
-                    listContainer.innerHTML = '<li class="loading">目前尚無最新公告</li>';
-                    return;
-                }
-
-                listContainer.innerHTML = '';
-
-                // 最新 5 筆公告倒序呈現
-                announcements.reverse().slice(0, 5).forEach(row => {
-                    const date = row[0] ? row[0].replace(/"/g, '').trim() : '';
-                    const tag = row[1] ? row[1].replace(/"/g, '').trim() : '公告';
-                    const author = row[2] ? row[2].replace(/"/g, '').trim() : '';
-                    const content = row[3] ? row[3].replace(/"/g, '').trim() : '';
-
-                    const li = document.createElement('li');
-                    li.className = 'ann-item';
-                    li.innerHTML = `
-                        <span class="tag">${tag}</span>
-                        <span class="date">${date}</span>
-                        <span class="author">[${author}]</span>
-                        <span class="content">${content}</span>
-                    `;
-                    listContainer.appendChild(li);
-                });
-
-            } catch (error) {
-                console.error('抓取試算表失敗：', error);
-                listContainer.innerHTML = `
-                    <li class="ann-item">
-                        <span class="tag">系統</span>
-                        <span class="content" style="color:#d93856;">無法載入最新公告，請點選右上方「查看歷史完整公告」觀看。</span>
-                    </li>
-                `;
-            }
-        }
-
-        // 頁面載入自動執行抓取
-        fetchAnnouncements();
-    </script>
-
-</body>
-</html>
