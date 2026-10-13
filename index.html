@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺北市中正高中122音樂班</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdf4f0;
+            --card-bg: #ffffff;
+            --primary-purple: #4a154b;
+            --sunset-red: #d93856;
+            --sunset-orange: #f26419;
+            --text-dark: #2b2d42;
+            --text-muted: #6c757d;
+            --shadow: 0 10px 22px rgba(184, 50, 80, 0.12);
+            --border-radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(180deg, #fdf4f0 0%, #fff0f3 50%, #fceae6 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        /* 夕陽紫橘紅漸層 Header */
+        header {
+            background: linear-gradient(135deg, #2b1055 0%, #75225b 30%, #b83250 60%, #e75a3c 85%, #f2994a 100%);
+            color: white;
+            padding: 55px 20px 48px 20px;
+            text-align: center;
+            border-bottom-left-radius: 36px;
+            border-bottom-right-radius: 36px;
+            box-shadow: 0 10px 30px rgba(117, 34, 91, 0.3);
+            margin-bottom: 35px;
+        }
+
+        header h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        }
+
+        header p {
+            font-size: 1.05rem;
+            opacity: 0.95;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.18);
+            display: inline-block;
+            padding: 8px 22px;
+            border-radius: 30px;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            color: #6b1d5c;
+            margin: 35px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 5px solid var(--sunset-red);
+            padding-left: 12px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid #ffe2e2;
+            transition: all 0.28s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 28px rgba(184, 50, 80, 0.22);
+            border-color: var(--sunset-red);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            color: #6b1d5c;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+        }
+
+        .card-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
+            color: #a4133c;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 9px 18px;
+            border-radius: 20px;
+            text-align: center;
+            align-self: flex-start;
+            transition: 0.25s;
+        }
+
+        .card:hover .card-btn {
+            background: linear-gradient(135deg, #b83250 0%, #e75a3c 100%);
+            color: white;
+        }
+
+        /* IG 特殊款式卡片 */
+        .card-ig {
+            background: linear-gradient(135deg, #ffffff 0%, #fff0f6 100%);
+            border: 1.5px solid #fbcfe8;
+        }
+
+        .card-ig:hover {
+            border-color: #e1306c;
+        }
+
+        .card-ig .card-btn {
+            background: linear-gradient(135deg, #f472b6 0%, #e1306c 100%);
+            color: white;
+        }
+
+        /* 公告區塊 */
+        .announcement-box {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid #ffe2e2;
+        }
+
+        .ann-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #fff0f3;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .ann-header h2 { color: #6b1d5c; font-size: 1.15rem; }
+
+        .history-link {
+            color: var(--sunset-red);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 700;
+            transition: opacity 0.2s;
+        }
+
+        .history-link:hover { opacity: 0.8; }
+
+        .ann-list { list-style: none; padding: 0; margin: 0; }
+
+        .ann-item {
+            padding: 12px 0;
+            border-bottom: 1px dashed #fcd5ce;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .ann-item:last-child { border-bottom: none; }
+
+        .tag {
+            background: #ffe5ec;
+            color: #b83250;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .date { font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; }
+        .author { font-size: 0.85rem; color: #6b1d5c; font-weight: 700; white-space: nowrap; }
+        .content { font-size: 0.95rem; color: var(--text-dark); flex-grow: 1; }
+
+        .loading { color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 15px 0; }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 標題與夕陽漸層 Header -->
+    <header>
+        <h1>臺北市中正高中122音樂班</h1>
+        <p>【沒有音樂，生命是一個錯誤--德國哲學家尼采】</p>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. 📢 班級最新公告 -->
+        <h2 class="section-title">📢 班級最新公告</h2>
+        <div class="announcement-box">
+            <div class="ann-header">
+                <h2>📌 即時消息提醒</h2>
+                <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSZPrL68-j6NE34fBc7ZSYpGH6YeIM_FPjX2USYOG4F-kzsWea8IQRB2xuGb1uH5fgRoBt95OmIBbbI/pubhtml" target="_blank" class="history-link">
+                    📜 查看歷史完整公告 ↗
+                </a>
+            </div>
+
+            <!-- CSV 自動連動顯示區域 -->
+            <ul id="announcement-list" class="ann-list">
+                <li class="loading">⏳ 正在同步載入 Google 試算表最新公告...</li>
+            </ul>
+        </div>
+
+        <!-- 2. 🖼️ 班級相簿與檔案資源 -->
+        <h2 class="section-title">🖼️ 班級相簿與檔案資源</h2>
+        <div class="grid">
+
+            <!-- 班級活動照片集 -->
+            <a href="https://drive.google.com/drive/u/0/folders/1GUukDYNqs3RGSUh8-H8VaeYRW-Fcur5a" target="_blank" class="card">
+                <div>
+                    <div class="card-icon">📸</div>
+                    <h3>122班 活動照片集</h3>
+                    <p>直接連至 Google 雲端硬碟，瀏覽與下載班級活動、音樂會高畫質照片。</p>
+                </div>
+                <span class="card-btn">開啟雲端相簿 ↗</span>
+            </a>
+
+            <!-- 班級雲端資料夾 -->
+            <a href="https://drive.google.com/drive/u/0/folders/19VCm5TIsQWh0ls3OQSDZbfWIesruEjJH" target="_blank" class="card">
+                <div>
+                    <div class="card-icon">📁</div>
+                    <h3>班級雲端資料夾</h3>
+                    <p>包含重要文件資訊、課程參考資料等</p>
+                </div>
+                <span class="card-btn">開啟資料夾 ↗</span>
+            </a>
+
+        </div>
+
+        <!-- 3. 🎲 班級線上工具 -->
+        <h2 class="section-title">🎲 班級線上工具</h2>
+        <div class="grid">
+            
+            <!-- 打掃工作抽籤系統 -->
+            <a href="cleaning.html" class="card">
+                <div>
+                    <div class="card-icon">🧹</div>
+                    <h3>打掃工作抽籤系統</h3>
+                    <p>自動分配 122教室、男女廁、辦公室、外走廊及琴房打掃工作。</p>
+                </div>
+                <span class="card-btn">前往抽籤 →</span>
+            </a>
+
+            <!-- 122班 座位抽籤系統 -->
+            <a href="seating.html" class="card">
+                <div>
+                    <div class="card-icon">🎹</div>
+                    <h3>122班 座位抽籤系統</h3>
+                    <p>8-Bit 像素風格！包含左鋼琴、右門、上講台的 4×5 座位圖。</p>
+                </div>
+                <span class="card-btn">前往抽籤 →</span>
+            </a>
+
+        </div>
+
+        <!-- 4. 📱 班級社群平台 (IG) -->
+        <h2 class="section-title">📱 班級社群平台</h2>
+        <div class="grid">
+            
+            <a href="https://www.instagram.com/zzsh_music.41/" target="_blank" class="card card-ig">
+                <div>
+                    <div class="card-icon">📸</div>
+                    <h3>122音樂班 官方 Instagram</h3>
+                    <p>追蹤 @zzsh_music.41，即時掌握班級日常、音樂會消息與精采花絮！</p>
+                </div>
+                <span class="card-btn">追蹤 IG @zzsh_music.41 ↗</span>
+            </a>
+
+        </div>
+
+        <footer>
+            <p>© 臺北市中正高中 122音樂班 | Powered by GitHub Pages</p>
+        </footer>
+
+    </div>
+
+    <!-- 試算表 CSV 自動讀取 JS -->
+    <script>
+        const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSZPrL68-j6NE34fBc7ZSYpGH6YeIM_FPjX2USYOG4F-kzsWea8IQRB2xuGb1uH5fgRoBt95OmIBbbI/pub?gid=0&single=true&output=csv';
+
+        async function fetchAnnouncements() {
+            const listContainer = document.getElementById('announcement-list');
+            
+            try {
+                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                if (!response.ok) throw new Error('網路回應異常');
+                
+                const data = await response.text();
+
+                // 解析 CSV 行
+                const lines = data.split(/\r\n|\n/);
+                const announcements = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    
+                    // 簡易 CSV 欄位分割
+                    const cols = lines[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
+                    if (cols.length >= 4 && cols[0] !== '') {
+                        announcements.push(cols);
+                    }
+                }
+
+                if (announcements.length === 0) {
+                    listContainer.innerHTML = '<li class="loading">目前尚無最新公告</li>';
+                    return;
+                }
+
+                listContainer.innerHTML = '';
+
+                // 最新 5 筆公告（倒序）
+                announcements.reverse().slice(0, 5).forEach(col => {
+                    const date = col[0] || '';
+                    const tag = col[1] || '公告';
+                    const author = col[2] || '';
+                    const content = col[3] || '';
+
+                    const li = document.createElement('li');
+                    li.className = 'ann-item';
+                    li.innerHTML = `
+                        <span class="tag">${tag}</span>
+                        <span class="date">${date}</span>
+                        <span class="author">[${author}]</span>
+                        <span class="content">${content}</span>
+                    `;
+                    listContainer.appendChild(li);
+                });
+
+            } catch (error) {
+                console.error('抓取試算表失敗：', error);
+                listContainer.innerHTML = `
+                    <li class="ann-item">
+                        <span class="tag">系統</span>
+                        <span class="content" style="color:#d93856;">無法即時載入最新公告，請點選右上方「查看歷史完整公告」觀看。</span>
+                    </li>
+                `;
+            }
+        }
+
+        fetchAnnouncements();
+    </script>
+
+</body>
+</html>
