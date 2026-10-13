@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>122班 座位抽籤系統 8-Bit Pixel Edition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Pixel Fonts: DotGothic16 & Press Start 2P -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        pixel: ['"DotGothic16"', '"Press Start 2P"', 'monospace'],
+                    },
+                    colors: {
+                        pixelSky: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            300: '#7ccafc',
+                            400: '#36b2f8',
+                            500: '#0ca0e9',
+                            600: '#0280c7',
+                            700: '#0365a1',
+                            800: '#075285',
+                            900: '#0c426e',
+                        },
+                        pixelYellow: '#fef08a',
+                        pixelPink: '#fbcfe8',
+                        pixelGreen: '#bbf7d0',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 復古像素平滑處理 */
+        * {
+            image-rendering: pixelated;
+            font-family: 'DotGothic16', monospace;
+        }
+
+        body {
+            background-color: #dbeafe;
+            background-image: 
+                radial-gradient(#bfdbfe 2px, transparent 2px),
+                radial-gradient(#bfdbfe 2px, #dbeafe 2px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            min-height: 100vh;
+        }
+
+        /* 像素方塊邊框 (Pixel Border Effect) */
+        .pixel-box {
+            background: #ffffff;
+            border: 4px solid #1e293b;
+            box-shadow: 
+                4px 4px 0px 0px #1e293b,
+                inset -4px -4px 0px 0px #cbd5e1;
+            position: relative;
+        }
+
+        .pixel-box-blue {
+            background: #e0f2fe;
+            border: 4px solid #0369a1;
+            box-shadow: 
+                4px 4px 0px 0px #0c4a6e,
+                inset -4px -4px 0px 0px #bae6fd;
+        }
+
+        .pixel-btn {
+            background: #38bdf8;
+            color: #0f172a;
+            border: 4px solid #0f172a;
+            box-shadow: 
+                4px 4px 0px 0px #0f172a,
+                inset -4px -4px 0px 0px #0284c7;
+            transition: all 0.1s ease;
+            user-select: none;
+        }
+
+        .pixel-btn:hover {
+            background: #7dd3fc;
+            transform: translate(-2px, -2px);
+            box-shadow: 
+                6px 6px 0px 0px #0f172a,
+                inset -4px -4px 0px 0px #0284c7;
+        }
+
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 
+                2px 2px 0px 0px #0f172a,
+                inset -2px -2px 0px 0px #0284c7;
+        }
+
+        .pixel-seat {
+            background: #ffffff;
+            border: 3px solid #1e293b;
+            box-shadow: 3px 3px 0px 0px #1e293b;
+            transition: all 0.15s ease;
+        }
+
+        .pixel-seat:hover {
+            background: #f0f9ff;
+            border-color: #0284c7;
+            transform: translateY(-2px);
+            box-shadow: 4px 5px 0px 0px #0284c7;
+        }
+
+        .pixel-seat.selected {
+            background: #fef08a !important;
+            border-color: #b45309 !important;
+            box-shadow: 4px 4px 0px 0px #b45309 !important;
+            animation: pixelPulse 0.8s infinite alternate;
+        }
+
+        .pixel-seat.dragging {
+            opacity: 0.4;
+        }
+
+        .pixel-seat.drag-over {
+            background: #bae6fd !important;
+            border-color: #0369a1 !important;
+        }
+
+        @keyframes pixelPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.04); }
+        }
+
+        /* 專用列印樣式 (A4 橫印) */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0.8cm;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .pixel-box, .pixel-seat {
+                border: 2px solid #000 !important;
+                box-shadow: none !important;
+                background: white !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pb-12">
+
+    <!-- 頂部頁頭 Navbar -->
+    <header class="no-print bg-sky-900 text-white border-b-4 border-slate-900 px-4 py-3 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <!-- 像素遊戲機圖示 -->
+                <div class="w-10 h-10 bg-yellow-400 border-2 border-slate-900 flex items-center justify-center text-slate-900 text-xl font-bold shadow-[2px_2px_0px_0px_#000]">
+                    🎮
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-wider flex items-center gap-2">
+                        中正高中音樂班 122班 <span class="bg-sky-400 text-slate-900 text-xs px-2 py-0.5 border border-slate-900 font-bold">8-BIT 座位抽籤系統</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- 搜尋欄位 -->
+            <div class="w-full md:w-64 relative">
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="🔍 搜尋學生姓名..." 
+                    class="w-full px-3 py-1.5 text-sm bg-sky-950 text-sky-100 border-2 border-sky-400 focus:outline-none focus:border-yellow-300 rounded-none placeholder-sky-400">
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 pt-6">
+
+        <!-- 操作控制區 -->
+        <div class="pixel-box p-4 sm:p-5 mb-6 no-print">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+                
+                <!-- 狀態資訊標籤 -->
+                <div class="flex flex-wrap items-center justify-center gap-3 text-xs">
+                    <div class="bg-sky-100 border-2 border-slate-800 px-3 py-1.5 font-bold flex items-center gap-2">
+                        <span>👥 人數：20 人</span>
+                    </div>
+                    <div class="bg-yellow-100 border-2 border-slate-800 px-3 py-1.5 font-bold flex items-center gap-2">
+                        <span>🪑 規格：4直排 × 5橫排</span>
+                    </div>
+                    <div id="statusBadge" class="bg-emerald-100 border-2 border-slate-800 px-3 py-1.5 font-bold text-emerald-800">
+                        ⚡ 系統準備就緒
+                    </div>
+                </div>
+
+                <!-- 操作按鈕群組 -->
+                <div class="flex flex-wrap items-center justify-center gap-3 w-full lg:w-auto">
+                    <button onclick="startDrawAnimation()" class="pixel-btn px-6 py-2.5 font-black text-sm flex items-center gap-2">
+                        <span>🎲 開始隨機抽籤</span>
+                    </button>
+
+                    <button onclick="resetToInitial()" class="pixel-btn bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 text-xs font-bold">
+                        <span>🔄 恢復預設</span>
+                    </button>
+
+                    <button onclick="window.print()" class="pixel-btn bg-purple-300 hover:bg-purple-200 text-slate-900 px-4 py-2.5 text-xs font-bold">
+                        <span>🖨️ 列印</span>
+                    </button>
+
+                    <button onclick="exportCSV()" class="pixel-btn bg-emerald-400 hover:bg-emerald-300 text-slate-900 px-4 py-2.5 text-xs font-bold">
+                        <span>📥 匯出 CSV</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-3 pt-2 border-t-2 border-dashed border-slate-300 text-xs text-slate-600 flex flex-wrap justify-between gap-2">
+                <div>💡 提示：點擊任何兩位同學的座位即可相互對調，或直接按住滑鼠拖曳對調。</div>
+                <div class="font-bold text-sky-700">★ 上：講台 ｜ 左：鋼琴 ｜ 右：門</div>
+            </div>
+        </div>
+
+        <!-- 教室平面圖容器 -->
+        <div class="pixel-box-blue p-4 sm:p-8 relative">
+            
+            <!-- 列印專用標題區 -->
+            <div class="hidden print-only text-center mb-6">
+                <h1 class="text-2xl font-black text-black">中正高中音樂班 122班 座位分配表</h1>
+                <p class="text-sm text-gray-600 mt-1" id="printDate"></p>
+            </div>
+
+            <!-- 【上方】像素講台區 -->
+            <div class="mb-8 flex flex-col items-center justify-center">
+                <div class="bg-slate-800 text-white border-4 border-slate-900 px-8 py-3 shadow-[4px_4px_0px_0px_#000] flex items-center gap-4">
+                    <!-- 講台 Pixel SVG -->
+                    <svg width="36" height="36" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
+                        <path d="M1 2H15V6H1V2Z" fill="#334155"/>
+                        <path d="M2 3H14V5H2V3Z" fill="#1E293B"/>
+                        <path d="M3 6H13V14H3V6Z" fill="#B45309"/>
+                        <path d="M4 7H12V13H4V7Z" fill="#78350F"/>
+                        <path d="M7 9H9V12H7V9Z" fill="#FEF08A"/>
+                    </svg>
+                    <span class="text-lg sm:text-xl font-black tracking-widest text-yellow-300">【 講 台 / 黑 板 】</span>
+                </div>
+            </div>
+
+            <!-- 主教室區域 (左鋼琴 / 中座位 / 右教室門) -->
+            <div class="grid grid-cols-12 gap-3 sm:gap-6 items-stretch">
+
+                <!-- 【左側】像素鋼琴區 -->
+                <div class="col-span-3 sm:col-span-2 flex flex-col items-center justify-center">
+                    <div class="w-full h-full min-h-[260px] bg-sky-200 border-4 border-slate-900 p-3 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_0px_#000]">
+                        <!-- 鋼琴 Pixel SVG -->
+                        <svg width="48" height="48" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2">
+                            <path d="M1 2H15V13H1V2Z" fill="#0F172A"/>
+                            <path d="M2 3H14V8H2V3Z" fill="#1E293B"/>
+                            <!-- 音樂白鍵 -->
+                            <path d="M2 9H4V13H2V9Z" fill="#FFFFFF"/>
+                            <path d="M5 9H7V13H5V9Z" fill="#FFFFFF"/>
+                            <path d="M8 9H10V13H8V9Z" fill="#FFFFFF"/>
+                            <path d="M11 9H13V13H11V9Z" fill="#FFFFFF"/>
+                            <!-- 黑鍵 -->
+                            <path d="M3.5 9H4.5V11H3.5V9Z" fill="#000000"/>
+                            <path d="M6.5 9H7.5V11H6.5V9Z" fill="#000000"/>
+                            <path d="M9.5 9H10.5V11H9.5V9Z" fill="#000000"/>
+                            <!-- 音符 -->
+                            <path d="M12 1H14V5H12V1Z" fill="#38BDF8"/>
+                        </svg>
+                        <span class="font-black text-slate-900 text-base sm:text-lg">鋼 琴</span>
+                        <span class="text-[10px] bg-sky-400 border border-slate-900 px-1 mt-1 font-bold">PIANO</span>
+                    </div>
+                </div>
+
+                <!-- 【中央】20 位學生座位區 (4直排 x 5橫排) -->
+                <div class="col-span-6 sm:col-span-8">
+                    <div id="seatingGrid" class="grid grid-cols-4 gap-2 sm:gap-4">
+                        <!-- 由 JS 動態生成 20 個座位，完全無排號文字 -->
+                    </div>
+                </div>
+
+                <!-- 【右側】像素教室門區 -->
+                <div class="col-span-3 sm:col-span-2 flex flex-col items-center justify-center">
+                    <div class="w-full h-full min-h-[260px] bg-amber-100 border-4 border-slate-900 p-3 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_0px_#000]">
+                        <!-- 門 Pixel SVG -->
+                        <svg width="48" height="48" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2">
+                            <path d="M2 1H14V15H2V1Z" fill="#B45309"/>
+                            <path d="M3 2H13V14H3V2Z" fill="#D97706"/>
+                            <!-- 門窗 -->
+                            <path d="M5 4H11V8H5V4Z" fill="#93C5FD"/>
+                            <path d="M6 5H10V7H6V5Z" fill="#E0F2FE"/>
+                            <!-- 門把 -->
+                            <path d="M11 9H12V11H11V9Z" fill="#FEF08A"/>
+                        </svg>
+                        <span class="font-black text-slate-900 text-base sm:text-lg">教室門</span>
+                        <span class="text-[10px] bg-amber-300 border border-slate-900 px-1 mt-1 font-bold">DOOR</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-8 text-center text-xs font-bold text-slate-500 tracking-widest">
+                ── 教室後方 ──
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 抽籤 Modal 動畫 -->
+    <div id="drawModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 hidden">
+        <div class="pixel-box p-8 max-w-sm w-full text-center">
+            <div class="text-4xl mb-3 animate-bounce">🎲</div>
+            <h3 class="text-xl font-black text-slate-900 mb-2">122班 座位洗牌中...</h3>
+            
+            <div class="bg-sky-100 border-2 border-slate-900 p-4 my-4">
+                <div id="shuffleSlotText" class="text-2xl font-black text-sky-700 h-8 flex items-center justify-center">
+                    準備進行...
+                </div>
+            </div>
+
+            <div class="w-full bg-slate-200 h-4 border-2 border-slate-900 overflow-hidden p-0.5">
+                <div id="drawProgressBar" class="bg-sky-500 h-full w-0 transition-all duration-75"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 訊息提示 -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 pixel-box bg-slate-900 text-white px-4 py-2.5 flex items-center gap-2 translate-y-20 opacity-0 transition-all duration-200 pointer-events-none text-xs">
+        <span id="toastIcon">✨</span>
+        <span id="toastMsg">操作成功</span>
+    </div>
+
+    <script>
+        // 20 位學生原始名單
+        const initialStudents = [
+            "于紫晴", "方怡心", "王若妤", "吳予綸", "吳佩蓁",
+            "吳旂碩", "宋亭頤", "李宇涵", "林忻潼", "張又可",
+            "許祐瑄", "陳少羲", "陳林靖", "曾勻欣", "黃美醇",
+            "廖子緹", "蔡沁恩", "鄭旭宏", "魏貴檠", "羅立庭"
+        ];
+
+        let currentSeats = [...initialStudents];
+        let selectedIndex = null;
+        let dragSourceIndex = null;
+
+        // Web Audio 8-Bit Synthesizer (紅白機音效)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playRetroSound(type) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                } else if (type === 'swap') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'fanfare') {
+                    // 勝利音效
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, i) => {
+                        const noteOsc = audioCtx.createOscillator();
+                        const noteGain = audioCtx.createGain();
+                        noteOsc.type = 'square';
+                        noteOsc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.08);
+                        noteGain.gain.setValueAtTime(0.08, audioCtx.currentTime + i * 0.08);
+                        noteGain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.08 + 0.1);
+                        noteOsc.connect(noteGain);
+                        noteGain.connect(audioCtx.destination);
+                        noteOsc.start(audioCtx.currentTime + i * 0.08);
+                        noteOsc.stop(audioCtx.currentTime + i * 0.08 + 0.1);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSeats();
+            document.getElementById('printDate').innerText = `列印時間：${new Date().toLocaleDateString('zh-TW')}`;
+        });
+
+        // 渲染 20 個座位卡片 (完全不包含任何排數欄位文字)
+        function renderSeats() {
+            const grid = document.getElementById('seatingGrid');
+            grid.innerHTML = '';
+
+            currentSeats.forEach((studentName, index) => {
+                const isSelected = selectedIndex === index;
+
+                const card = document.createElement('div');
+                card.className = `pixel-seat rounded-none p-3 sm:p-4 text-center cursor-pointer relative ${isSelected ? 'selected' : ''}`;
+                card.draggable = true;
+
+                card.innerHTML = `
+                    <div class="pointer-events-none my-1">
+                        <span class="student-name font-black text-slate-900 text-base sm:text-lg tracking-wider block">
+                            ${studentName}
+                        </span>
+                    </div>
+                `;
+
+                // 事件綁定
+                card.addEventListener('click', () => handleSeatClick(index));
+                card.addEventListener('dragstart', (e) => handleDragStart(e, index));
+                card.addEventListener('dragover', (e) => handleDragOver(e, card));
+                card.addEventListener('dragleave', () => handleDragLeave(card));
+                card.addEventListener('drop', (e) => handleDrop(e, index));
+
+                grid.appendChild(card);
+            });
+        }
+
+        // 抽籤動畫
+        function startDrawAnimation() {
+            const modal = document.getElementById('drawModal');
+            const slotText = document.getElementById('shuffleSlotText');
+            const progressBar = document.getElementById('drawProgressBar');
+
+            modal.classList.remove('hidden');
+            selectedIndex = null;
+
+            let step = 0;
+            const totalSteps = 30;
+
+            const timer = setInterval(() => {
+                step++;
+                const randIndex = Math.floor(Math.random() * initialStudents.length);
+                slotText.innerText = initialStudents[randIndex];
+                progressBar.style.width = `${(step / totalSteps) * 100}%`;
+                
+                playRetroSound('click');
+
+                if (step >= totalSteps) {
+                    clearInterval(timer);
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        executeShuffle();
+                        playRetroSound('fanfare');
+                        triggerConfetti();
+                        showToast('🎉 抽籤完成！20 位同學座位已重新分配');
+                    }, 150);
+                }
+            }, 60);
+        }
+
+        // 洗牌算法
+        function executeShuffle() {
+            const array = [...initialStudents];
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            currentSeats = array;
+            renderSeats();
+
+            const badge = document.getElementById('statusBadge');
+            badge.className = "bg-emerald-100 border-2 border-slate-800 px-3 py-1.5 font-bold text-emerald-800";
+            badge.innerText = "✓ 已完成抽籤";
+        }
+
+        // 恢復預設名單
+        function resetToInitial() {
+            currentSeats = [...initialStudents];
+            selectedIndex = null;
+            renderSeats();
+            playRetroSound('click');
+            showToast('已恢復預設名單順序');
+
+            const badge = document.getElementById('statusBadge');
+            badge.className = "bg-emerald-100 border-2 border-slate-800 px-3 py-1.5 font-bold text-emerald-800";
+            badge.innerText = "⚡ 預設順序";
+        }
+
+        // 點擊對調處理
+        function handleSeatClick(index) {
+            playRetroSound('click');
+
+            if (selectedIndex === null) {
+                selectedIndex = index;
+                renderSeats();
+                showToast(`已選擇 [${currentSeats[index]}]，請點擊另一位同學交換`);
+            } else if (selectedIndex === index) {
+                selectedIndex = null;
+                renderSeats();
+            } else {
+                const studentA = currentSeats[selectedIndex];
+                const studentB = currentSeats[index];
+
+                [currentSeats[selectedIndex], currentSeats[index]] = [currentSeats[index], currentSeats[selectedIndex]];
+                
+                selectedIndex = null;
+                renderSeats();
+                playRetroSound('swap');
+                showToast(`成功對調：[${studentA}] ↔ [${studentB}]`);
+            }
+        }
+
+        // 拖曳對調
+        function handleDragStart(e, index) {
+            dragSourceIndex = index;
+            e.currentTarget.classList.add('dragging');
+        }
+
+        function handleDragOver(e, card) {
+            e.preventDefault();
+            card.classList.add('drag-over');
+        }
+
+        function handleDragLeave(card) {
+            card.classList.remove('drag-over');
+        }
+
+        function handleDrop(e, targetIndex) {
+            e.preventDefault();
+            if (dragSourceIndex === null || dragSourceIndex === targetIndex) return;
+
+            const studentA = currentSeats[dragSourceIndex];
+            const studentB = currentSeats[targetIndex];
+
+            [currentSeats[dragSourceIndex], currentSeats[targetIndex]] = [currentSeats[targetIndex], currentSeats[dragSourceIndex]];
+
+            dragSourceIndex = null;
+            selectedIndex = null;
+            renderSeats();
+            playRetroSound('swap');
+            showToast(`拖曳對調：[${studentA}] ↔ [${studentB}]`);
+        }
+
+        // 搜尋功能
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.pixel-seat');
+
+            cards.forEach(card => {
+                const nameEl = card.querySelector('.student-name');
+                const nameText = nameEl.innerText.toLowerCase();
+
+                if (query === '' || nameText.includes(query)) {
+                    card.style.opacity = '1';
+                    if (query !== '' && nameText.includes(query)) {
+                        card.style.backgroundColor = '#fef08a';
+                    } else {
+                        card.style.backgroundColor = '';
+                    }
+                } else {
+                    card.style.opacity = '0.25';
+                    card.style.backgroundColor = '';
+                }
+            });
+        }
+
+        // 匯出 CSV
+        function exportCSV() {
+            let csvContent = "\uFEFF座位號碼,學生姓名\n";
+            currentSeats.forEach((student, idx) => {
+                csvContent += `"${idx + 1}","${student}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `中正高中音樂班122班_座位分配.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('已匯出 CSV 檔案！');
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 60,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
