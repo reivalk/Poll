@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>122班 座位抽籤系統 8-Bit Pixel Edition</title>
-    <!-- Tailwind CSS -->
+    <title>中正高中音樂班 122班 - 8-Bit 像素座位抽籤系統</title>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -21,19 +22,20 @@
                 extend: {
                     fontFamily: {
                         pixel: ['"DotGothic16"', '"Press Start 2P"', 'monospace'],
+                        heading: ['"Press Start 2P"', '"DotGothic16"', 'monospace'],
                     },
                     colors: {
-                        pixelSky: {
-                            50: '#f0f7ff',
-                            100: '#e0effe',
-                            200: '#bae0fd',
-                            300: '#7ccafc',
-                            400: '#36b2f8',
-                            500: '#0ca0e9',
-                            600: '#0280c7',
-                            700: '#0365a1',
-                            800: '#075285',
-                            900: '#0c426e',
+                        pixelBlue: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                            900: '#0f172a',
                         },
                         pixelYellow: '#fef08a',
                         pixelPink: '#fbcfe8',
@@ -43,38 +45,39 @@
             }
         }
     </script>
+
     <style>
-        /* 復古像素平滑處理 */
         * {
             image-rendering: pixelated;
             font-family: 'DotGothic16', monospace;
+            user-select: none;
         }
 
         body {
-            background-color: #dbeafe;
+            background-color: #e0f2fe;
             background-image: 
-                radial-gradient(#bfdbfe 2px, transparent 2px),
-                radial-gradient(#bfdbfe 2px, #dbeafe 2px);
-            background-size: 32px 32px;
-            background-position: 0 0, 16px 16px;
+                radial-gradient(#bae6fd 2px, transparent 2px),
+                radial-gradient(#bae6fd 2px, #e0f2fe 2px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
             min-height: 100vh;
         }
 
-        /* 像素方塊邊框 (Pixel Border Effect) */
-        .pixel-box {
+        /* 經典 8-Bit 像素外框 (Pixel Border Effect) */
+        .pixel-card {
             background: #ffffff;
-            border: 4px solid #1e293b;
+            border: 4px solid #0f172a;
             box-shadow: 
-                4px 4px 0px 0px #1e293b,
+                4px 4px 0px 0px #0f172a,
                 inset -4px -4px 0px 0px #cbd5e1;
             position: relative;
         }
 
-        .pixel-box-blue {
-            background: #e0f2fe;
-            border: 4px solid #0369a1;
+        .pixel-card-sky {
+            background: #f0f9ff;
+            border: 4px solid #0f172a;
             box-shadow: 
-                4px 4px 0px 0px #0c4a6e,
+                4px 4px 0px 0px #0f172a,
                 inset -4px -4px 0px 0px #bae6fd;
         }
 
@@ -86,7 +89,7 @@
                 4px 4px 0px 0px #0f172a,
                 inset -4px -4px 0px 0px #0284c7;
             transition: all 0.1s ease;
-            user-select: none;
+            cursor: pointer;
         }
 
         .pixel-btn:hover {
@@ -104,46 +107,48 @@
                 inset -2px -2px 0px 0px #0284c7;
         }
 
+        /* 學生座位卡片 */
         .pixel-seat {
             background: #ffffff;
-            border: 3px solid #1e293b;
-            box-shadow: 3px 3px 0px 0px #1e293b;
-            transition: all 0.15s ease;
+            border: 3px solid #0f172a;
+            box-shadow: 3px 3px 0px 0px #0f172a;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .pixel-seat:hover {
             background: #f0f9ff;
             border-color: #0284c7;
-            transform: translateY(-2px);
-            box-shadow: 4px 5px 0px 0px #0284c7;
+            transform: translateY(-3px);
+            box-shadow: 4px 6px 0px 0px #0284c7;
         }
 
         .pixel-seat.selected {
             background: #fef08a !important;
             border-color: #b45309 !important;
             box-shadow: 4px 4px 0px 0px #b45309 !important;
-            animation: pixelPulse 0.8s infinite alternate;
+            animation: pixelJump 0.6s infinite alternate;
         }
 
         .pixel-seat.dragging {
-            opacity: 0.4;
+            opacity: 0.35;
         }
 
         .pixel-seat.drag-over {
             background: #bae6fd !important;
-            border-color: #0369a1 !important;
+            border-color: #0284c7 !important;
+            transform: scale(1.03);
         }
 
-        @keyframes pixelPulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.04); }
+        @keyframes pixelJump {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-4px); }
         }
 
-        /* 專用列印樣式 (A4 橫印) */
+        /* 專用 A4 列印樣式 */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 0.8cm;
+                margin: 0.6cm;
             }
             body {
                 background: white !important;
@@ -155,7 +160,7 @@
             .print-only {
                 display: block !important;
             }
-            .pixel-box, .pixel-seat {
+            .pixel-card, .pixel-seat {
                 border: 2px solid #000 !important;
                 box-shadow: none !important;
                 background: white !important;
@@ -163,78 +168,86 @@
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased pb-12">
+<body class="text-slate-900 antialiased pb-12">
 
-    <!-- 頂部頁頭 Navbar -->
-    <header class="no-print bg-sky-900 text-white border-b-4 border-slate-900 px-4 py-3 shadow-md">
+    <header class="no-print bg-slate-900 text-white border-b-4 border-slate-950 px-4 py-3 shadow-lg">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <!-- 標題與像素圖示 -->
             <div class="flex items-center gap-3">
-                <!-- 像素遊戲機圖示 -->
-                <div class="w-10 h-10 bg-yellow-400 border-2 border-slate-900 flex items-center justify-center text-slate-900 text-xl font-bold shadow-[2px_2px_0px_0px_#000]">
-                    🎮
+                <div class="w-10 h-10 bg-sky-400 border-2 border-white flex items-center justify-center text-slate-900 text-xl font-bold shadow-[2px_2px_0px_0px_#fff]">
+                    🎹
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-black tracking-wider flex items-center gap-2">
-                        中正高中音樂班 122班 <span class="bg-sky-400 text-slate-900 text-xs px-2 py-0.5 border border-slate-900 font-bold">8-BIT 座位抽籤系統</span>
+                        中正高中音樂班 122班 
+                        <span class="bg-yellow-300 text-slate-900 text-xs px-2 py-0.5 border border-slate-900 font-bold">8-BIT 座位抽籤</span>
                     </h1>
                 </div>
             </div>
 
-            <!-- 搜尋欄位 -->
-            <div class="w-full md:w-64 relative">
-                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="🔍 搜尋學生姓名..." 
-                    class="w-full px-3 py-1.5 text-sm bg-sky-950 text-sky-100 border-2 border-sky-400 focus:outline-none focus:border-yellow-300 rounded-none placeholder-sky-400">
+            <!-- 右側控制：搜尋 + 音效開關 -->
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <!-- 搜尋欄位 -->
+                <div class="relative flex-1 md:w-60">
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="🔍 搜尋學生姓名..." 
+                        class="w-full px-3 py-1.5 text-sm bg-slate-800 text-sky-100 border-2 border-sky-400 focus:outline-none focus:border-yellow-300 placeholder-sky-400 rounded-none">
+                </div>
+
+                <!-- 音效切換按鈕 -->
+                <button id="soundToggleBtn" onclick="toggleSound()" class="pixel-btn px-3 py-1.5 bg-yellow-300 text-xs font-bold flex items-center gap-1.5 whitespace-nowrap">
+                    <span id="soundIcon">🔊</span>
+                    <span id="soundText">音效 ON</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 pt-6">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 pt-6">
 
-        <!-- 操作控制區 -->
-        <div class="pixel-box p-4 sm:p-5 mb-6 no-print">
+        <div class="pixel-card p-4 mb-6 no-print">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
                 
-                <!-- 狀態資訊標籤 -->
-                <div class="flex flex-wrap items-center justify-center gap-3 text-xs">
-                    <div class="bg-sky-100 border-2 border-slate-800 px-3 py-1.5 font-bold flex items-center gap-2">
-                        <span>👥 人數：20 人</span>
+                <!-- 狀態資訊 -->
+                <div class="flex flex-wrap items-center justify-center gap-2.5 text-xs font-bold">
+                    <div class="bg-sky-100 border-2 border-slate-900 px-3 py-1.5 flex items-center gap-1.5">
+                        <span>👥 學生總數：20 人</span>
                     </div>
-                    <div class="bg-yellow-100 border-2 border-slate-800 px-3 py-1.5 font-bold flex items-center gap-2">
-                        <span>🪑 規格：4直排 × 5橫排</span>
+                    <div class="bg-yellow-100 border-2 border-slate-900 px-3 py-1.5 flex items-center gap-1.5">
+                        <span>🪑 格局：5直排 × 4橫排</span>
                     </div>
-                    <div id="statusBadge" class="bg-emerald-100 border-2 border-slate-800 px-3 py-1.5 font-bold text-emerald-800">
+                    <div id="statusBadge" class="bg-emerald-100 border-2 border-slate-900 px-3 py-1.5 text-emerald-900">
                         ⚡ 系統準備就緒
                     </div>
                 </div>
 
                 <!-- 操作按鈕群組 -->
-                <div class="flex flex-wrap items-center justify-center gap-3 w-full lg:w-auto">
-                    <button onclick="startDrawAnimation()" class="pixel-btn px-6 py-2.5 font-black text-sm flex items-center gap-2">
+                <div class="flex flex-wrap items-center justify-center gap-2.5 w-full lg:w-auto">
+                    <button onclick="startDrawAnimation()" class="pixel-btn bg-sky-400 hover:bg-sky-300 px-5 py-2 text-sm font-black flex items-center gap-1.5">
                         <span>🎲 開始隨機抽籤</span>
                     </button>
 
-                    <button onclick="resetToInitial()" class="pixel-btn bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 text-xs font-bold">
+                    <button onclick="resetToInitial()" class="pixel-btn bg-slate-200 hover:bg-slate-300 text-slate-900 px-3.5 py-2 text-xs font-bold">
                         <span>🔄 恢復預設</span>
                     </button>
 
-                    <button onclick="window.print()" class="pixel-btn bg-purple-300 hover:bg-purple-200 text-slate-900 px-4 py-2.5 text-xs font-bold">
+                    <button onclick="window.print()" class="pixel-btn bg-purple-300 hover:bg-purple-200 text-slate-900 px-3.5 py-2 text-xs font-bold">
                         <span>🖨️ 列印</span>
                     </button>
 
-                    <button onclick="exportCSV()" class="pixel-btn bg-emerald-400 hover:bg-emerald-300 text-slate-900 px-4 py-2.5 text-xs font-bold">
+                    <button onclick="exportCSV()" class="pixel-btn bg-emerald-300 hover:bg-emerald-200 text-slate-900 px-3.5 py-2 text-xs font-bold">
                         <span>📥 匯出 CSV</span>
                     </button>
                 </div>
             </div>
 
-            <div class="mt-3 pt-2 border-t-2 border-dashed border-slate-300 text-xs text-slate-600 flex flex-wrap justify-between gap-2">
-                <div>💡 提示：點擊任何兩位同學的座位即可相互對調，或直接按住滑鼠拖曳對調。</div>
-                <div class="font-bold text-sky-700">★ 上：講台 ｜ 左：鋼琴 ｜ 右：門</div>
+            <div class="mt-3 pt-2.5 border-t-2 border-dashed border-slate-300 text-xs text-slate-600 flex flex-wrap justify-between gap-2">
+                <div>💡 提示：點擊任何兩位同學即可相互對調座位，或按住滑鼠拖曳交換。</div>
+                <div class="font-bold text-sky-800">★ 上：講台 ｜ 左：鋼琴 ｜ 右：門</div>
             </div>
         </div>
 
-        <!-- 教室平面圖容器 -->
-        <div class="pixel-box-blue p-4 sm:p-8 relative">
+        <div class="pixel-card-sky p-3 sm:p-6 relative">
             
             <!-- 列印專用標題區 -->
             <div class="hidden print-only text-center mb-6">
@@ -242,76 +255,137 @@
                 <p class="text-sm text-gray-600 mt-1" id="printDate"></p>
             </div>
 
-            <!-- 【上方】像素講台區 -->
-            <div class="mb-8 flex flex-col items-center justify-center">
-                <div class="bg-slate-800 text-white border-4 border-slate-900 px-8 py-3 shadow-[4px_4px_0px_0px_#000] flex items-center gap-4">
-                    <!-- 講台 Pixel SVG -->
-                    <svg width="36" height="36" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
-                        <path d="M1 2H15V6H1V2Z" fill="#334155"/>
-                        <path d="M2 3H14V5H2V3Z" fill="#1E293B"/>
-                        <path d="M3 6H13V14H3V6Z" fill="#B45309"/>
-                        <path d="M4 7H12V13H4V7Z" fill="#78350F"/>
-                        <path d="M7 9H9V12H7V9Z" fill="#FEF08A"/>
+            <!-- 【上方】可愛 8-Bit 像素講台與黑板 -->
+            <div class="mb-6 flex flex-col items-center justify-center">
+                <div class="bg-slate-900 border-4 border-slate-950 p-2 sm:p-3 shadow-[4px_4px_0px_0px_#0f172a] max-w-xl w-full flex items-center justify-center gap-3 sm:gap-6">
+                    
+                    <!-- 可愛黑板 SVG (形狀銳利像素化) -->
+                    <svg width="220" height="60" viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" class="max-w-full">
+                        <!-- 黑板木框 -->
+                        <rect x="0" y="0" width="220" height="60" fill="#78350F" />
+                        <!-- 黑板內部深綠色 -->
+                        <rect x="6" y="6" width="208" height="48" fill="#064E3B" />
+                        <!-- 五線譜畫線 (白粉筆) -->
+                        <rect x="20" y="18" width="180" height="2" fill="#6EE7B7" opacity="0.6" />
+                        <rect x="20" y="24" width="180" height="2" fill="#6EE7B7" opacity="0.6" />
+                        <rect x="20" y="30" width="180" height="2" fill="#6EE7B7" opacity="0.6" />
+                        <rect x="20" y="36" width="180" height="2" fill="#6EE7B7" opacity="0.6" />
+                        <rect x="20" y="42" width="180" height="2" fill="#6EE7B7" opacity="0.6" />
+                        <!-- 黑板字樣與粉筆繪圖 -->
+                        <rect x="85" y="12" width="50" height="8" fill="#FEF08A" />
+                        <!-- 音符點綴 -->
+                        <rect x="30" y="20" width="6" height="12" fill="#FFFFFF" />
+                        <rect x="36" y="20" width="10" height="4" fill="#FFFFFF" />
+                        <rect x="160" y="26" width="6" height="12" fill="#FEF08A" />
+                        <rect x="166" y="26" width="10" height="4" fill="#FEF08A" />
                     </svg>
-                    <span class="text-lg sm:text-xl font-black tracking-widest text-yellow-300">【 講 台 / 黑 板 】</span>
+
+                    <!-- 可愛講台桌子 SVG -->
+                    <svg width="70" height="60" viewBox="0 0 70 60" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" class="hidden sm:block">
+                        <!-- 講台桌體 -->
+                        <rect x="5" y="10" width="60" height="45" fill="#B45309" />
+                        <rect x="8" y="13" width="54" height="10" fill="#D97706" />
+                        <rect x="10" y="26" width="50" height="25" fill="#78350F" />
+                        <!-- 麥克風 / 書本 -->
+                        <rect x="28" y="2" width="14" height="8" fill="#FEF08A" />
+                        <rect x="34" y="0" width="2" height="10" fill="#38BDF8" />
+                        <!-- 講台標籤文字 "講台" -->
+                        <rect x="20" y="34" width="30" height="10" fill="#FEF08A" />
+                    </svg>
+                </div>
+                <div class="text-xs font-black bg-slate-900 text-yellow-300 px-3 py-1 border-2 border-slate-950 mt-1 tracking-widest">
+                    【 講 台 / 黑 板 】
                 </div>
             </div>
 
-            <!-- 主教室區域 (左鋼琴 / 中座位 / 右教室門) -->
-            <div class="grid grid-cols-12 gap-3 sm:gap-6 items-stretch">
+            <!-- 主教室平面區域：左鋼琴 / 中 5x4 座位 / 右教室門 -->
+            <div class="grid grid-cols-12 gap-2 sm:gap-4 items-stretch">
 
-                <!-- 【左側】像素鋼琴區 -->
                 <div class="col-span-3 sm:col-span-2 flex flex-col items-center justify-center">
-                    <div class="w-full h-full min-h-[260px] bg-sky-200 border-4 border-slate-900 p-3 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_0px_#000]">
-                        <!-- 鋼琴 Pixel SVG -->
-                        <svg width="48" height="48" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2">
-                            <path d="M1 2H15V13H1V2Z" fill="#0F172A"/>
-                            <path d="M2 3H14V8H2V3Z" fill="#1E293B"/>
-                            <!-- 音樂白鍵 -->
-                            <path d="M2 9H4V13H2V9Z" fill="#FFFFFF"/>
-                            <path d="M5 9H7V13H5V9Z" fill="#FFFFFF"/>
-                            <path d="M8 9H10V13H8V9Z" fill="#FFFFFF"/>
-                            <path d="M11 9H13V13H11V9Z" fill="#FFFFFF"/>
+                    <div class="w-full h-full min-h-[280px] bg-sky-200 border-4 border-slate-900 p-2 sm:p-3 flex flex-col items-center justify-between text-center shadow-[4px_4px_0px_0px_#0f172a]">
+                        
+                        <div class="font-black text-slate-900 text-xs sm:text-sm bg-sky-400 px-2 py-0.5 border border-slate-900 w-full">
+                            🎹 鋼 琴
+                        </div>
+
+                        <!-- 可愛 8-Bit 直立鋼琴 SVG -->
+                        <svg width="72" height="110" viewBox="0 0 72 110" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" class="my-2">
+                            <!-- 琴身本體 (深色像素木紋) -->
+                            <rect x="4" y="10" width="64" height="90" fill="#1E293B" />
+                            <rect x="8" y="14" width="56" height="35" fill="#0F172A" />
+                            <!-- 琴譜架 & 樂譜 -->
+                            <rect x="22" y="20" width="28" height="20" fill="#FEF08A" />
+                            <rect x="25" y="24" width="10" height="2" fill="#0F172A" />
+                            <rect x="25" y="28" width="22" height="2" fill="#0F172A" />
+                            <rect x="25" y="32" width="18" height="2" fill="#0F172A" />
+                            <!-- 琴鍵底座 -->
+                            <rect x="0" y="50" width="72" height="25" fill="#334155" />
+                            <!-- 白鍵 -->
+                            <rect x="4" y="52" width="8" height="20" fill="#FFFFFF" />
+                            <rect x="13" y="52" width="8" height="20" fill="#FFFFFF" />
+                            <rect x="22" y="52" width="8" height="20" fill="#FFFFFF" />
+                            <rect x="31" y="52" width="8" height="20" fill="#FFFFFF" />
+                            <rect x="40" y="52" width="8" height="20" fill="#FFFFFF" />
+                            <rect x="49" y="52" width="8" height="20" fill="#FFFFFF" />
+                            <rect x="58" y="52" width="8" height="20" fill="#FFFFFF" />
                             <!-- 黑鍵 -->
-                            <path d="M3.5 9H4.5V11H3.5V9Z" fill="#000000"/>
-                            <path d="M6.5 9H7.5V11H6.5V9Z" fill="#000000"/>
-                            <path d="M9.5 9H10.5V11H9.5V9Z" fill="#000000"/>
-                            <!-- 音符 -->
-                            <path d="M12 1H14V5H12V1Z" fill="#38BDF8"/>
+                            <rect x="10" y="52" width="5" height="11" fill="#0F172A" />
+                            <rect x="19" y="52" width="5" height="11" fill="#0F172A" />
+                            <rect x="37" y="52" width="5" height="11" fill="#0F172A" />
+                            <rect x="46" y="52" width="5" height="11" fill="#0F172A" />
+                            <rect x="55" y="52" width="5" height="11" fill="#0F172A" />
+                            <!-- 鋼琴腳踏板 -->
+                            <rect x="24" y="92" width="6" height="8" fill="#FEF08A" />
+                            <rect x="33" y="92" width="6" height="8" fill="#FEF08A" />
+                            <rect x="42" y="92" width="6" height="8" fill="#FEF08A" />
+                            <!-- 飄浮音符 -->
+                            <rect x="52" y="2" width="6" height="6" fill="#38BDF8" />
+                            <rect x="58" y="2" width="8" height="2" fill="#38BDF8" />
+                            <rect x="64" y="2" width="2" height="8" fill="#38BDF8" />
                         </svg>
-                        <span class="font-black text-slate-900 text-base sm:text-lg">鋼 琴</span>
-                        <span class="text-[10px] bg-sky-400 border border-slate-900 px-1 mt-1 font-bold">PIANO</span>
+
+                        <span class="text-[10px] text-slate-600 font-bold">PIANO AREA</span>
                     </div>
                 </div>
 
-                <!-- 【中央】20 位學生座位區 (4直排 x 5橫排) -->
                 <div class="col-span-6 sm:col-span-8">
-                    <div id="seatingGrid" class="grid grid-cols-4 gap-2 sm:gap-4">
-                        <!-- 由 JS 動態生成 20 個座位，完全無排號文字 -->
+                    <!-- 5 直排 x 4 橫排 (純學生卡片，無任何第幾排第幾列標籤) -->
+                    <div id="seatingGrid" class="grid grid-cols-5 gap-1.5 sm:gap-3">
+                        <!-- 由 JS 動態繪製 20 個學生座位 -->
                     </div>
                 </div>
 
-                <!-- 【右側】像素教室門區 -->
                 <div class="col-span-3 sm:col-span-2 flex flex-col items-center justify-center">
-                    <div class="w-full h-full min-h-[260px] bg-amber-100 border-4 border-slate-900 p-3 flex flex-col items-center justify-center text-center shadow-[4px_4px_0px_0px_#000]">
-                        <!-- 門 Pixel SVG -->
-                        <svg width="48" height="48" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2">
-                            <path d="M2 1H14V15H2V1Z" fill="#B45309"/>
-                            <path d="M3 2H13V14H3V2Z" fill="#D97706"/>
-                            <!-- 門窗 -->
-                            <path d="M5 4H11V8H5V4Z" fill="#93C5FD"/>
-                            <path d="M6 5H10V7H6V5Z" fill="#E0F2FE"/>
-                            <!-- 門把 -->
-                            <path d="M11 9H12V11H11V9Z" fill="#FEF08A"/>
+                    <div class="w-full h-full min-h-[280px] bg-amber-100 border-4 border-slate-900 p-2 sm:p-3 flex flex-col items-center justify-between text-center shadow-[4px_4px_0px_0px_#0f172a]">
+                        
+                        <div class="font-black text-slate-900 text-xs sm:text-sm bg-amber-300 px-2 py-0.5 border border-slate-900 w-full">
+                            🚪 教室門
+                        </div>
+
+                        <!-- 可愛 8-Bit 門口 SVG -->
+                        <svg width="64" height="110" viewBox="0 0 64 110" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" class="my-2">
+                            <!-- 外門框 -->
+                            <rect x="2" y="2" width="60" height="106" fill="#78350F" />
+                            <!-- 門板本體 -->
+                            <rect x="6" y="6" width="52" height="98" fill="#D97706" />
+                            <!-- 門上玻璃窗 -->
+                            <rect x="14" y="16" width="36" height="32" fill="#93C5FD" />
+                            <rect x="18" y="20" width="12" height="10" fill="#E0F2FE" />
+                            <!-- 122 門牌 -->
+                            <rect x="20" y="54" width="24" height="10" fill="#FEF08A" />
+                            <rect x="22" y="56" width="20" height="6" fill="#0F172A" />
+                            <!-- 金屬門把 -->
+                            <rect x="44" y="70" width="8" height="8" fill="#FEF08A" />
+                            <rect x="42" y="72" width="4" height="4" fill="#B45309" />
                         </svg>
-                        <span class="font-black text-slate-900 text-base sm:text-lg">教室門</span>
-                        <span class="text-[10px] bg-amber-300 border border-slate-900 px-1 mt-1 font-bold">DOOR</span>
+
+                        <span class="text-[10px] text-amber-800 font-bold">CLASSROOM DOOR</span>
                     </div>
                 </div>
 
             </div>
 
-            <div class="mt-8 text-center text-xs font-bold text-slate-500 tracking-widest">
+            <div class="mt-6 text-center text-xs font-black text-slate-500 tracking-widest">
                 ── 教室後方 ──
             </div>
         </div>
@@ -319,13 +393,14 @@
     </main>
 
     <!-- 抽籤 Modal 動畫 -->
-    <div id="drawModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 hidden">
-        <div class="pixel-box p-8 max-w-sm w-full text-center">
-            <div class="text-4xl mb-3 animate-bounce">🎲</div>
-            <h3 class="text-xl font-black text-slate-900 mb-2">122班 座位洗牌中...</h3>
+    <div id="drawModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 hidden">
+        <div class="pixel-card p-6 sm:p-8 max-w-sm w-full text-center">
+            <div class="text-4xl mb-2 animate-bounce">🎲</div>
+            <h3 class="text-lg font-black text-slate-900 mb-1">122班 座位隨機洗牌中</h3>
+            <p class="text-xs text-slate-500 font-bold mb-4">正在隨機分配 20 個座位...</p>
             
-            <div class="bg-sky-100 border-2 border-slate-900 p-4 my-4">
-                <div id="shuffleSlotText" class="text-2xl font-black text-sky-700 h-8 flex items-center justify-center">
+            <div class="bg-sky-100 border-2 border-slate-900 p-3 my-3">
+                <div id="shuffleSlotText" class="text-2xl font-black text-sky-800 h-8 flex items-center justify-center">
                     準備進行...
                 </div>
             </div>
@@ -337,7 +412,7 @@
     </div>
 
     <!-- Toast 訊息提示 -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 pixel-box bg-slate-900 text-white px-4 py-2.5 flex items-center gap-2 translate-y-20 opacity-0 transition-all duration-200 pointer-events-none text-xs">
+    <div id="toast" class="fixed bottom-6 right-6 z-50 pixel-card bg-slate-900 text-white px-4 py-2.5 flex items-center gap-2 translate-y-20 opacity-0 transition-all duration-200 pointer-events-none text-xs">
         <span id="toastIcon">✨</span>
         <span id="toastMsg">操作成功</span>
     </div>
@@ -354,13 +429,17 @@
         let currentSeats = [...initialStudents];
         let selectedIndex = null;
         let dragSourceIndex = null;
+        let soundEnabled = true;
 
-        // Web Audio 8-Bit Synthesizer (紅白機音效)
+        // Web Audio API 8-Bit 紅白機音效合成器
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playRetroSound(type) {
+            if (!soundEnabled) return;
             try {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
 
@@ -369,37 +448,65 @@
 
                 if (type === 'click') {
                     osc.type = 'square';
-                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
-                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                    osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.04);
+                    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
                     osc.start();
-                    osc.stop(audioCtx.currentTime + 0.05);
+                    osc.stop(audioCtx.currentTime + 0.04);
                 } else if (type === 'swap') {
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.08);
-                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(260, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(520, audioCtx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
                     gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
                     osc.start();
                     osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'tick') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.02);
                 } else if (type === 'fanfare') {
-                    // 勝利音效
+                    // 勝利 8-Bit 弦樂音效
                     const notes = [523.25, 659.25, 783.99, 1046.50];
                     notes.forEach((freq, i) => {
                         const noteOsc = audioCtx.createOscillator();
                         const noteGain = audioCtx.createGain();
                         noteOsc.type = 'square';
-                        noteOsc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.08);
-                        noteGain.gain.setValueAtTime(0.08, audioCtx.currentTime + i * 0.08);
-                        noteGain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.08 + 0.1);
+                        noteOsc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.07);
+                        noteGain.gain.setValueAtTime(0.06, audioCtx.currentTime + i * 0.07);
+                        noteGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.07 + 0.09);
                         noteOsc.connect(noteGain);
                         noteGain.connect(audioCtx.destination);
-                        noteOsc.start(audioCtx.currentTime + i * 0.08);
-                        noteOsc.stop(audioCtx.currentTime + i * 0.08 + 0.1);
+                        noteOsc.start(audioCtx.currentTime + i * 0.07);
+                        noteOsc.stop(audioCtx.currentTime + i * 0.07 + 0.09);
                     });
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.log('Audio disabled or blocked');
+            }
+        }
+
+        // 切換聲音開關
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btnText = document.getElementById('soundText');
+            const btnIcon = document.getElementById('soundIcon');
+            const btn = document.getElementById('soundToggleBtn');
+
+            if (soundEnabled) {
+                btnIcon.innerText = "🔊";
+                btnText.innerText = "音效 ON";
+                btn.className = "pixel-btn px-3 py-1.5 bg-yellow-300 text-xs font-bold flex items-center gap-1.5 whitespace-nowrap";
+                playRetroSound('click');
+            } else {
+                btnIcon.innerText = "🔇";
+                btnText.innerText = "音效 OFF";
+                btn.className = "pixel-btn px-3 py-1.5 bg-slate-300 text-xs font-bold flex items-center gap-1.5 whitespace-nowrap";
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -407,7 +514,7 @@
             document.getElementById('printDate').innerText = `列印時間：${new Date().toLocaleDateString('zh-TW')}`;
         });
 
-        // 渲染 20 個座位卡片 (完全不包含任何排數欄位文字)
+        // 渲染 20 個學生座位 (5 直排 x 4 橫排，完全不帶任何第幾排第幾列欄位標籤)
         function renderSeats() {
             const grid = document.getElementById('seatingGrid');
             grid.innerHTML = '';
@@ -416,12 +523,12 @@
                 const isSelected = selectedIndex === index;
 
                 const card = document.createElement('div');
-                card.className = `pixel-seat rounded-none p-3 sm:p-4 text-center cursor-pointer relative ${isSelected ? 'selected' : ''}`;
+                card.className = `pixel-seat p-2 sm:p-3 text-center cursor-pointer relative flex flex-col items-center justify-center min-h-[64px] sm:min-h-[76px] ${isSelected ? 'selected' : ''}`;
                 card.draggable = true;
 
                 card.innerHTML = `
-                    <div class="pointer-events-none my-1">
-                        <span class="student-name font-black text-slate-900 text-base sm:text-lg tracking-wider block">
+                    <div class="pointer-events-none w-full">
+                        <span class="student-name font-black text-slate-900 text-sm sm:text-base tracking-wider block">
                             ${studentName}
                         </span>
                     </div>
@@ -438,7 +545,7 @@
             });
         }
 
-        // 抽籤動畫
+        // 隨機抽籤動畫
         function startDrawAnimation() {
             const modal = document.getElementById('drawModal');
             const slotText = document.getElementById('shuffleSlotText');
@@ -448,7 +555,7 @@
             selectedIndex = null;
 
             let step = 0;
-            const totalSteps = 30;
+            const totalSteps = 28;
 
             const timer = setInterval(() => {
                 step++;
@@ -456,7 +563,7 @@
                 slotText.innerText = initialStudents[randIndex];
                 progressBar.style.width = `${(step / totalSteps) * 100}%`;
                 
-                playRetroSound('click');
+                playRetroSound('tick');
 
                 if (step >= totalSteps) {
                     clearInterval(timer);
@@ -466,12 +573,12 @@
                         playRetroSound('fanfare');
                         triggerConfetti();
                         showToast('🎉 抽籤完成！20 位同學座位已重新分配');
-                    }, 150);
+                    }, 120);
                 }
             }, 60);
         }
 
-        // 洗牌算法
+        // 隨機洗牌算法 (Fisher-Yates Shuffle)
         function executeShuffle() {
             const array = [...initialStudents];
             for (let i = array.length - 1; i > 0; i--) {
@@ -482,8 +589,8 @@
             renderSeats();
 
             const badge = document.getElementById('statusBadge');
-            badge.className = "bg-emerald-100 border-2 border-slate-800 px-3 py-1.5 font-bold text-emerald-800";
-            badge.innerText = "✓ 已完成抽籤";
+            badge.className = "bg-emerald-100 border-2 border-slate-900 px-3 py-1.5 font-bold text-emerald-900";
+            badge.innerText = "✓ 已完成隨機抽籤";
         }
 
         // 恢復預設名單
@@ -495,18 +602,18 @@
             showToast('已恢復預設名單順序');
 
             const badge = document.getElementById('statusBadge');
-            badge.className = "bg-emerald-100 border-2 border-slate-800 px-3 py-1.5 font-bold text-emerald-800";
+            badge.className = "bg-emerald-100 border-2 border-slate-900 px-3 py-1.5 font-bold text-emerald-900";
             badge.innerText = "⚡ 預設順序";
         }
 
-        // 點擊對調處理
+        // 點擊交換座位處理
         function handleSeatClick(index) {
             playRetroSound('click');
 
             if (selectedIndex === null) {
                 selectedIndex = index;
                 renderSeats();
-                showToast(`已選擇 [${currentSeats[index]}]，請點擊另一位同學交換`);
+                showToast(`已選擇 [${currentSeats[index]}]，請點擊另一位同學進行對調`);
             } else if (selectedIndex === index) {
                 selectedIndex = null;
                 renderSeats();
@@ -523,7 +630,7 @@
             }
         }
 
-        // 拖曳對調
+        // 拖曳對調處理 (Drag & Drop)
         function handleDragStart(e, index) {
             dragSourceIndex = index;
             e.currentTarget.classList.add('dragging');
@@ -554,7 +661,7 @@
             showToast(`拖曳對調：[${studentA}] ↔ [${studentB}]`);
         }
 
-        // 搜尋功能
+        // 搜尋學生功能 (高亮黃色外框)
         function handleSearch() {
             const query = document.getElementById('searchInput').value.trim().toLowerCase();
             const cards = document.querySelectorAll('.pixel-seat');
@@ -567,19 +674,22 @@
                     card.style.opacity = '1';
                     if (query !== '' && nameText.includes(query)) {
                         card.style.backgroundColor = '#fef08a';
+                        card.style.borderColor = '#b45309';
                     } else {
                         card.style.backgroundColor = '';
+                        card.style.borderColor = '';
                     }
                 } else {
                     card.style.opacity = '0.25';
                     card.style.backgroundColor = '';
+                    card.style.borderColor = '';
                 }
             });
         }
 
-        // 匯出 CSV
+        // 匯出 CSV 檔案
         function exportCSV() {
-            let csvContent = "\uFEFF座位號碼,學生姓名\n";
+            let csvContent = "\uFEFF座位編號,學生姓名\n";
             currentSeats.forEach((student, idx) => {
                 csvContent += `"${idx + 1}","${student}"\n`;
             });
@@ -588,7 +698,7 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = `中正高中音樂班122班_座位分配.csv`;
+            link.download = `中正高中音樂班122班_座位表.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -598,8 +708,8 @@
         function triggerConfetti() {
             if (typeof confetti === 'function') {
                 confetti({
-                    particleCount: 60,
-                    spread: 70,
+                    particleCount: 50,
+                    spread: 60,
                     origin: { y: 0.6 }
                 });
             }
@@ -612,7 +722,7 @@
             toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-            }, 2500);
+            }, 2400);
         }
     </script>
 </body>
